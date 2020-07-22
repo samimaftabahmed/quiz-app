@@ -1,10 +1,13 @@
 import React, {Component} from 'react';
 import quizService from "../service/quizService"
+import QuestionBox from "./QuestionBox";
 
 class QuizMain extends Component {
 
     state = {
-        questionBank: []
+        questionBank: [],
+        score: 0,
+        responses: 0
     };
 
     getQuestions = () => {
@@ -18,6 +21,15 @@ class QuizMain extends Component {
         this.getQuestions();
     }
 
+    computeAnswer = (answer, correctAnswer) => {
+        if (answer === correctAnswer) {
+            this.setState({score: this.state.score + 1})
+        }
+        this.setState(
+            {responses: this.state.responses < 5 ? this.state.responses + 1 : 5}
+        )
+    }
+
 
     render() {
         return (
@@ -28,8 +40,10 @@ class QuizMain extends Component {
                     </div>
                     {
                         this.state.questionBank.length > 0 &&
+                        this.state.responses < 5 &&
                         this.state.questionBank.map(q => {
-                            return <h4>{q.question}</h4>
+                            return <QuestionBox question={q.question} options={q.answers} key={q.questionId}
+                                                selected={answer => this.computeAnswer(q.answers, q.correct)}/>
                         })
                     }
                 </div>
