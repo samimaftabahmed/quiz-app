@@ -371,7 +371,7 @@ const qBank = [
     },
 ];
 
-function quizService(n = 5) {
+const quizService = (n = 5) => {
 
     return Promise.resolve(qBank.sort(() => 0.5 - Math.random()).slice(0, n));
 }
